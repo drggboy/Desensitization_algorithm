@@ -1,6 +1,3 @@
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -11,7 +8,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import com.google.common.hash.Hashing;
 
 public class test_lang3 {
-	public static String generateMD5(String input) {
+	public static String Hash_generateMD5(String input) {
         //获取MD5机密实例
 		try {
 			String result = Hashing.md5().hashBytes(input.getBytes("UTF-8")).toString();
@@ -79,7 +76,7 @@ public class test_lang3 {
 		return S;
 	}
 	
-	public static String  rand_substitute(String obj,int left, int right) {
+	public static String rand_substitute(String obj,int left, int right) {
 		if (StringUtils.isBlank(obj)) {
             return "";
         }
@@ -142,26 +139,50 @@ public class test_lang3 {
 	}
 	
 	public static String char_shift(String obj, int bit, String direction) {
-	if (StringUtils.isBlank(obj)) {
-        return "";
-    }
-	int length = obj.length();
-	String right_part;
-	String left_part;
-	if(direction == "向左") {
-		right_part = StringUtils.left(obj, bit);
-		left_part = StringUtils.right(obj, length - bit);
-	}
-	else {
-		right_part = StringUtils.left(obj, length - bit);
-		left_part = StringUtils.right(obj, bit);
-	}
-	String result = left_part + right_part;
-	return result;
+		if (StringUtils.isBlank(obj)) {
+	        return "";
+	    }
+		int length = obj.length();
+		String right_part;
+		String left_part;
+		if(direction == "向左") {
+			right_part = StringUtils.left(obj, bit);
+			left_part = StringUtils.right(obj, length - bit);
+		}
+		else {
+			right_part = StringUtils.left(obj, length - bit);
+			left_part = StringUtils.right(obj, bit);
+		}
+		String result = left_part + right_part;
+		return result;
 	}
 	
+	public static String encryption(String obj,String key) {
+		if (StringUtils.isBlank(obj)) {
+            return "";
+        }
+		String result = "NULL";
+		return result;
+	}
+	
+	public static String Bucket_desensitization(String pressure) {
+		if (StringUtils.isBlank(pressure)) {
+            return "";
+        }
+		int value = Integer.parseInt(pressure);
+		String result;
+		if(value > 140)
+			result = "高血压";
+		else if(value >= 90)
+			result = "正常血压";
+		else
+			result = "低血压";
+		return result;
+	}
+	
+	
 	public static void main(String[] args) {
-		String alg_1 = generateMD5("13800001234");
+		String alg_1 = Hash_generateMD5("13800001234");
 		System.out.println(alg_1);
 		// 哈希脱敏: 97d2bc5078985f4d0f2fc6d5b7475f80
 		
@@ -201,5 +222,12 @@ public class test_lang3 {
 		System.out.println(alg_10);
 		// 字符位移： 01234138000
 		
+		String alg_11 = encryption("13800001234","key");
+		System.out.println(alg_11);
+		// 加密脱敏： 
+		
+		String alg_12 = Bucket_desensitization("190");
+		System.out.println(alg_12);
+		// 分桶脱敏: 高血压
 	}
 }
