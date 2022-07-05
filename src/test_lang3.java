@@ -1,3 +1,5 @@
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -7,6 +9,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
 public class test_lang3 {
+	public static String generateMD5(String input) throws UnsupportedEncodingException {
+        //获取MD5机密实例
+        return Hashing?.md5().hashBytes(input.getBytes("UTF-8")).toString();
+    }
+	
 	public static String mask_char(String phon_num, int left, int right, char c) {
 		if (StringUtils.isBlank(phon_num)) {
             return "";
@@ -177,5 +184,6 @@ public class test_lang3 {
 		System.out.println(alg_10);
 		// 字符位移： 01234138000
 		
+		MessageDigest md5 = MessageDigest.getInstance("MD5")
 	}
 }
