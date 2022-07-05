@@ -8,11 +8,20 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
+import com.google.common.hash.Hashing;
+
 public class test_lang3 {
-//	public static String generateMD5(String input) throws UnsupportedEncodingException {
-//        //获取MD5机密实例
-//        return Hashing?.md5().hashBytes(input.getBytes("UTF-8")).toString();
-//    }
+	public static String generateMD5(String input) {
+        //获取MD5机密实例
+		try {
+			String result = Hashing.md5().hashBytes(input.getBytes("UTF-8")).toString();
+			return result;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return "Null";
+    }
 	
 	public static String mask_char(String phon_num, int left, int right, char c) {
 		if (StringUtils.isBlank(phon_num)) {
@@ -94,12 +103,20 @@ public class test_lang3 {
 		return result;
 	}
 	
-	public static String date_change(String obj,String s) throws ParseException {
+	public static String date_change(String obj,String s){
 		if (StringUtils.isBlank(obj)) {
             return "";
         }
 		SimpleDateFormat ft = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		Date date = ft.parse(obj);
+		Date date;
+		try {
+			date = ft.parse(obj);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			System.out.println("日期解析错误");
+			date = new Date();
+		}
 		Date round_date;
 		switch (s) { 
 		    case "年": 
@@ -144,6 +161,10 @@ public class test_lang3 {
 	}
 	
 	public static void main(String[] args) {
+		String alg_1 = generateMD5("13800001234");
+		System.out.println(alg_1);
+		// 哈希脱敏: 97d2bc5078985f4d0f2fc6d5b7475f80
+		
 		String alg_2 = mask_char("13945678952",3,4,'*');
 		System.out.println(alg_2);
 		// 遮盖指定位的字符: 139****8952
@@ -172,18 +193,13 @@ public class test_lang3 {
 		System.out.println(alg_8);
 		// 数字去精度: 1000.14
 		
-		try {
-			String alg_9 = date_change("2022/06/16 17:20:15","小时");
-			System.out.println(alg_9);
-			// 日期取整: 2022/06/16 17:00:00
-		} catch (Exception ep) {
-			ep.printStackTrace();
-		}
-		
+		String alg_9 = date_change("2022/06/16 17:20:15","小时");
+		System.out.println(alg_9);
+		// 日期取整: 2022/06/16 17:00:00
+
 		String alg_10 = char_shift("13800001234",5,"向右");
 		System.out.println(alg_10);
 		// 字符位移： 01234138000
 		
-//		MessageDigest md5 = MessageDigest.getInstance("MD5")
 	}
 }
