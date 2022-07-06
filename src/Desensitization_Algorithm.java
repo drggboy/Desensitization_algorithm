@@ -1,20 +1,22 @@
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
 import com.google.common.hash.Hashing;
 
-public class test_lang3 {
+public class Desensitization_Algorithm{
 	public static String Hash_generateMD5(String input) {
         //获取MD5机密实例
 		try {
 			String result = Hashing.md5().hashBytes(input.getBytes("UTF-8")).toString();
 			return result;
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return "Null";
@@ -157,13 +159,24 @@ public class test_lang3 {
 		return result;
 	}
 	
-	public static String encryption(String obj,String key) {
-		if (StringUtils.isBlank(obj)) {
-            return "";
-        }
-		String result = "NULL";
-		return result;
-	}
+	public static void DES(String plainText,String originKey) throws Exception {
+        System.out.print("明文：" + plainText + "     ");
+        
+        System.out.print("密钥：" + originKey + "     ");
+        SecretKeySpec key = new SecretKeySpec(originKey.getBytes(), "DES");
+        Cipher cipher = Cipher.getInstance("DES");
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+        byte[] encipherByte = cipher.doFinal(plainText.getBytes());
+        String encode = Base64.getEncoder().encodeToString(encipherByte);
+        System.out.print("加密：" + encode + "     ");
+        
+        cipher.init(Cipher.DECRYPT_MODE, key);
+        byte[] decode = Base64.getDecoder().decode(encode);
+        byte[] decipherByte = cipher.doFinal(decode);
+        String decipherText = new String(decipherByte);
+        System.out.println("解密：" + decipherText + "     ");
+    }
+	
 	
 	public static String Bucket_desensitization(String pressure) {
 		if (StringUtils.isBlank(pressure)) {
@@ -222,9 +235,13 @@ public class test_lang3 {
 		System.out.println(alg_10);
 		// 字符位移： 01234138000
 		
-		String alg_11 = encryption("13800001234","key");
-		System.out.println(alg_11);
-		// 加密脱敏： 
+		try {
+			DES("13800001234","12345678");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// DES加密脱敏： 
+		// 明文：13800001234     密钥：12345678     加密：bjFSssnneRgM2VDdO7lO7g==     解密：13800001234
 		
 		String alg_12 = Bucket_desensitization("190");
 		System.out.println(alg_12);
