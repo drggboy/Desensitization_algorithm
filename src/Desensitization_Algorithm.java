@@ -23,21 +23,41 @@ public class Desensitization_Algorithm{
     }
 	
 	public static String mask_char(String phon_num, int left, int right, char c) {
+		//遮盖指定位字符
 		if (StringUtils.isBlank(phon_num)) {
             return "";
         }
+		if (left>=right||left>phon_num.length()) {
+			System.out.println("请输入正确的指定位！");
+			throw new ArithmeticException();
+		}
 		String left_part = StringUtils.left(phon_num, left);
+		if (phon_num.length()-left_part.length()>right) {
 		int c_num = StringUtils.length(phon_num) - left - right;
 		String c_part = StringUtils.repeat(c, c_num);
 		String right_part = StringUtils.right(phon_num, right);
 		String result = left_part + c_part + right_part;
 		return result;
+		}else {
+			int c_num = StringUtils.length(phon_num) - left;
+			String c_part = StringUtils.repeat(c, c_num);
+			String result = left_part + c_part ;
+			return result;
+		}
+		
+		
+		
 	}
 	
 	public static String char_reserve(String phon_num,int left, int right, char c) {
+		//保留指定位字符
 		if (StringUtils.isBlank(phon_num)) {
             return "";
         }
+		if (left>=right||left>phon_num.length()||left<=0) {
+			System.out.println("请输入正确的指定位！");
+			throw new ArithmeticException();
+		}
 		String c_part = StringUtils.substring(phon_num, left-1, right);
 		String left_part = StringUtils.repeat(c, left-1);
 		int right_num = StringUtils.length(phon_num) - right;
@@ -94,7 +114,7 @@ public class Desensitization_Algorithm{
         }
 		String left_part_raw = StringUtils.substringBefore(obj, '.');
 		String right_part_raw = StringUtils.substringAfter(obj, '.');
-		int left_part_raw_num = StringUtils.length(right_part_raw);
+		int left_part_raw_num = StringUtils.length(left_part_raw);
 		String left_pre = StringUtils.left(left_part_raw, left);
 		String left_part = StringUtils.rightPad(left_pre, left_part_raw_num, "0");
 		String right_part = StringUtils.left(right_part_raw, right);
@@ -159,7 +179,7 @@ public class Desensitization_Algorithm{
 		return result;
 	}
 	
-	public static void DES(String plainText,String originKey) throws Exception {
+	public static String DES_enc(String plainText,String originKey) throws Exception {
         System.out.print("明文：" + plainText + "     ");
         
         System.out.print("密钥：" + originKey + "     ");
@@ -169,12 +189,25 @@ public class Desensitization_Algorithm{
         byte[] encipherByte = cipher.doFinal(plainText.getBytes());
         String encode = Base64.getEncoder().encodeToString(encipherByte);
         System.out.print("加密：" + encode + "     ");
+        return encode;
+        
+        
+    }
+	
+	public static String DES_dnc(String plainText,String originKey) throws Exception {
+        System.out.print("明文：" + plainText + "     ");
+        
+        System.out.print("密钥：" + originKey + "     ");
+        SecretKeySpec key = new SecretKeySpec(originKey.getBytes(), "DES");
+        Cipher cipher = Cipher.getInstance("DES");
+
         
         cipher.init(Cipher.DECRYPT_MODE, key);
-        byte[] decode = Base64.getDecoder().decode(encode);
+        byte[] decode = Base64.getDecoder().decode(plainText);
         byte[] decipherByte = cipher.doFinal(decode);
         String decipherText = new String(decipherByte);
         System.out.println("解密：" + decipherText + "     ");
+        return decipherText;
     }
 	
 	
@@ -235,11 +268,10 @@ public class Desensitization_Algorithm{
 		System.out.println(alg_10);
 		// 字符位移： 01234138000
 		
-		try {
-			DES("13800001234","12345678");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	
+		String DES_encode = DES_enc("13800001234","12345678");	
+		String DES_dncode = DES_dnc(DES_encode,"12345678");
+		
 		// DES加密脱敏： 
 		// 明文：13800001234     密钥：12345678     加密：bjFSssnneRgM2VDdO7lO7g==     解密：13800001234
 		
