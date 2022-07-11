@@ -7,19 +7,27 @@ import javax.crypto.spec.SecretKeySpec;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import com.google.common.hash.Hashing;
 
 public class Desensitization_Algorithm{
-	public static String Hash_generateMD5(String input) {
-        //获取MD5机密实例
-		try {
-			String result = Hashing.md5().hashBytes(input.getBytes("UTF-8")).toString();
-			return result;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "Null";
+	private static final int SALT_LENGTH = 6;
+	
+	public static String Hash_Md5_Sha1(String type, String sourcePassword) {
+        String salt = RandomStringUtils.randomAlphanumeric(SALT_LENGTH);
+        sourcePassword = String.format("%s%s", sourcePassword, salt);
+        String encryptedText = "";
+        switch (type) {
+            case "MD5":
+                encryptedText = DigestUtils.md5Hex(sourcePassword.getBytes());
+                break;
+            case "SHA1":
+                encryptedText = DigestUtils.sha1Hex(sourcePassword.getBytes());
+                break;
+        }
+        return String.format("%s", encryptedText);
     }
 	
 	public static String mask_char(String phon_num, int left, int right, char c) {
@@ -67,6 +75,7 @@ public class Desensitization_Algorithm{
 	}
 
 	public static String particular_before(String email_like,char parlar, char y) {
+		//特殊字符前
 		if (StringUtils.isBlank(email_like)) {
             return "";
         }
@@ -78,6 +87,7 @@ public class Desensitization_Algorithm{
 	}
 	
 	public static String particular_after(String obj,char parlar, char y) {
+		//特殊字符后
 		if (StringUtils.isBlank(obj)) {
             return "";
         }
@@ -90,6 +100,7 @@ public class Desensitization_Algorithm{
 	}
 	
 	public static String  char_substitute(String obj,String raw_1, String to_1, String raw_2, String to_2) {
+		//随机替换
 		if (StringUtils.isBlank(obj)) {
             return "";
         }
@@ -99,6 +110,7 @@ public class Desensitization_Algorithm{
 	}
 	
 	public static String rand_substitute(String obj,int left, int right) {
+		// 随机替换
 		if (StringUtils.isBlank(obj)) {
             return "";
         }
@@ -109,6 +121,7 @@ public class Desensitization_Algorithm{
 	}
 	
 	public static String  digital_precision(String obj,int left, int right) {
+		// 数字去精度
 		if (StringUtils.isBlank(obj)) {
             return "";
         }
@@ -123,6 +136,7 @@ public class Desensitization_Algorithm{
 	}
 	
 	public static String date_change(String obj,String s){
+		// 日期取整
 		if (StringUtils.isBlank(obj)) {
             return "";
         }
@@ -161,6 +175,7 @@ public class Desensitization_Algorithm{
 	}
 	
 	public static String char_shift(String obj, int bit, String direction) {
+		//字符位移
 		if (StringUtils.isBlank(obj)) {
 	        return "";
 	    }
@@ -188,14 +203,14 @@ public class Desensitization_Algorithm{
         cipher.init(Cipher.ENCRYPT_MODE, key);
         byte[] encipherByte = cipher.doFinal(plainText.getBytes());
         String encode = Base64.getEncoder().encodeToString(encipherByte);
-        System.out.print("加密：" + encode + "     ");
+        System.out.println("加密：" + encode + "     ");
         return encode;
         
         
     }
 	
 	public static String DES_dnc(String plainText,String originKey) throws Exception {
-        System.out.print("明文：" + plainText + "     ");
+        System.out.print("密文：" + plainText + "     ");
         
         System.out.print("密钥：" + originKey + "     ");
         SecretKeySpec key = new SecretKeySpec(originKey.getBytes(), "DES");
@@ -212,6 +227,7 @@ public class Desensitization_Algorithm{
 	
 	
 	public static String Bucket_desensitization(String pressure) {
+		//分桶脱敏
 		if (StringUtils.isBlank(pressure)) {
             return "";
         }
@@ -227,10 +243,10 @@ public class Desensitization_Algorithm{
 	}
 	
 	
-	public static void main(String[] args) {
-		String alg_1 = Hash_generateMD5("13800001234");
+	public static void main(String[] args) throws Exception{
+		String alg_1 = Hash_Md5_Sha1("MD5","13800001234");
 		System.out.println(alg_1);
-		// 哈希脱敏: 97d2bc5078985f4d0f2fc6d5b7475f80
+		// 哈希脱敏: 180e5d114eb2067827b9a64ccd4309f7
 		
 		String alg_2 = mask_char("13945678952",3,4,'*');
 		System.out.println(alg_2);
@@ -268,12 +284,11 @@ public class Desensitization_Algorithm{
 		System.out.println(alg_10);
 		// 字符位移： 01234138000
 		
-	
-		String DES_encode = DES_enc("13800001234","12345678");	
+		// DES加密脱敏
+		String DES_encode = DES_enc("13800001234","12345678");
+		// 明文：13800001234     密钥：12345678     加密：bjFSssnneRgM2VDdO7lO7g==     
 		String DES_dncode = DES_dnc(DES_encode,"12345678");
-		
-		// DES加密脱敏： 
-		// 明文：13800001234     密钥：12345678     加密：bjFSssnneRgM2VDdO7lO7g==     解密：13800001234
+		// 密文：bjFSssnneRgM2VDdO7lO7g==     密钥：12345678     解密：13800001234     
 		
 		String alg_12 = Bucket_desensitization("190");
 		System.out.println(alg_12);
