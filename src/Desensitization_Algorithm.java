@@ -19,7 +19,9 @@ public class Desensitization_Algorithm{
 	//随机盐值的长度，用于哈希脱敏
 	private static final int SALT_LENGTH = 6;
 	
+
     /**
+     * <code>
      * 脱敏算法类型：哈希脱敏<br>
      * 脱敏算法1：MD5、SHA-1、HMAC<br>
      * <br>
@@ -32,10 +34,12 @@ public class Desensitization_Algorithm{
      * <br>
 	 * 调用方式：<br>
 	 * 		String alg_1 = Hash_Md5_Sha1("MD5","13800001234")
-     * 
+	 * </code>
+	 * 
      * @param type 				  加密方法：“MD5”、“SHA1”、“HMAC”
      * @param sourcePassword      待加密字符串
      * @return 加密后的字符串
+     * 
      */
 	public static String Hash_Md5_Sha1(String type, String sourcePassword) {
         String salt = RandomStringUtils.randomAlphanumeric(SALT_LENGTH);
@@ -53,6 +57,7 @@ public class Desensitization_Algorithm{
     }
 	
 	/**
+	 * <code>
 	 * 脱敏算法类型：掩码脱敏<br>
 	 * 脱敏算法2：掩盖指定位的字符<br>
 	 * <br>
@@ -63,6 +68,7 @@ public class Desensitization_Algorithm{
      * <br>
 	 * 调用方式：<br>
 	 * 		String alg_2 = mask_char("13945678952",3,4,'*')
+	 * </code>
 	 * 
 	 * @param phon_num		待脱敏字符串
 	 * @param left			要保留的前 left 位
@@ -92,6 +98,7 @@ public class Desensitization_Algorithm{
 	}
 	
 	/**
+	 * <code>
 	 * 脱敏算法类型：掩码脱敏<br>
 	 * 脱敏算法3：保留指定位的字符<br>
 	 * <br>
@@ -102,6 +109,7 @@ public class Desensitization_Algorithm{
      * <br>
 	 * 调用方式：<br>
 	 * 		String alg_3= char_reserve("13945678952",4,7,'#')
+	 * </code>
 	 * 
 	 * @param phon_num		待处理字符串
 	 * @param left			保留位从左边第left位开始（从1开始数）
@@ -127,6 +135,7 @@ public class Desensitization_Algorithm{
 	}
 
 	/**
+	 * <code>
 	 * 脱敏算法类型：掩码脱敏<br>
 	 * 脱敏算法4：特殊字符前遮盖<br>
 	 * 此处仅针对第一个特殊字符前的字符串进行覆盖<br>
@@ -138,6 +147,7 @@ public class Desensitization_Algorithm{
      * <br>
 	 * 调用方式：<br>
 	 * 		String alg_4 = particular_before("835547752@qq.com",'@','*')
+	 * </code>
 	 * 
 	 * @param email_like		待处理字符串
 	 * @param parlar			特殊字符
@@ -157,6 +167,7 @@ public class Desensitization_Algorithm{
 	}
 	
 	/**
+	 * <code>
 	 * 脱敏算法类型：掩码脱敏<br>
 	 * 脱敏算法5：特殊字符后遮盖<br>
 	 * <br>
@@ -169,6 +180,7 @@ public class Desensitization_Algorithm{
      * <br>
 	 * 调用方式：<br>
 	 * 		String alg_5 = particular_after("test.name", '.', '#')
+	 * </code>
 	 * 
 	 * @param obj		待处理字符串
 	 * @param parlar	特殊字符
@@ -189,6 +201,7 @@ public class Desensitization_Algorithm{
 	}
 	
 	/**
+	 * <code>
 	 * 脱敏算法类型：替换脱敏<br>
 	 * 脱敏算法6：码表替换<br>
 	 * <br>
@@ -202,6 +215,7 @@ public class Desensitization_Algorithm{
      * <br>
 	 * 调用方式：<br>
 	 * 		String alg_6 = char_substitute("13800001234","0","A","1","B")
+	 * </code>
 	 * 
 	 * @param obj			待处理字符串
 	 * @param raw_1			待替换字符1
@@ -221,6 +235,7 @@ public class Desensitization_Algorithm{
 	}
 	
 	/**
+	 * <code>
 	 * 脱敏算法类型：替换脱敏<br>
 	 * 脱敏算法7：随机替换<br>
 	 * <br>
@@ -233,6 +248,7 @@ public class Desensitization_Algorithm{
      * <br>
 	 * 调用方式：<br>
 	 * 		String alg_7 = rand_substitute("13800001234",3,4)
+	 * </code>
 	 * 
 	 * @param obj		待处理字符串
 	 * @param left		左边left位保留
@@ -251,6 +267,7 @@ public class Desensitization_Algorithm{
 	}
 	
 	/**
+	 * <code>
 	 * 脱敏算法类型：变换脱敏<br>
 	 * 脱敏算法8：数字去精度<br>
 	 * <br>
@@ -263,6 +280,7 @@ public class Desensitization_Algorithm{
      * <br>
 	 * 调用方式：<br>
 	 * 		String alg_8 = digital_precision("103.1415",1,2)
+	 * </code>
 	 * 
 	 * @param obj		待处理字符串
 	 * @param left		整数部分保留位数
@@ -285,6 +303,7 @@ public class Desensitization_Algorithm{
 	}
 	
 	/**
+	 * <code>
 	 * 脱敏算法类型：变换脱敏<br>
 	 * 脱敏算法9：日期取整<br>
 	 * <br>
@@ -295,6 +314,7 @@ public class Desensitization_Algorithm{
      * <br>
 	 * 调用方式：<br>
 	 * 		String alg_9 = date_change("2022/06/16 17:20:15","小时")
+	 * </code>
 	 * 
 	 * @param obj		待处理字符串
 	 * @param s			"年"、"月"、"日"、"小时"、"分钟"
@@ -340,6 +360,7 @@ public class Desensitization_Algorithm{
 	}
 	
 	/**
+	 * <code>
 	 * 脱敏算法类型：变换脱敏<br>
 	 * 脱敏算法10：字符位移<br>
 	 * <br>
@@ -352,6 +373,7 @@ public class Desensitization_Algorithm{
      * <br>
 	 * 调用方式：<br>
 	 * 		String alg_10 = char_shift("13800001234",5,"向右")
+	 * </code>
 	 * 
 	 * @param obj			待处理字符串
 	 * @param bit			位移位数
@@ -379,6 +401,7 @@ public class Desensitization_Algorithm{
 	}
 	
 	/**
+	 * <code>
 	 * 脱敏算法类型：加密脱敏<br>
 	 * 脱敏算法11：DES、3DES、AES<br>
 	 * <br>
@@ -392,6 +415,7 @@ public class Desensitization_Algorithm{
      * <br>
      * 调用方式：<br>
      * 		String DES_encode = DES_enc("13800001234","12345678")
+     * </code>
      * 
 	 * @param plainText		待处理字符串
 	 * @param originKey		密钥
@@ -413,6 +437,7 @@ public class Desensitization_Algorithm{
     }
 	
 	/**
+	 * <code>
 	 * 脱敏算法类型：加密脱敏<br>
 	 * 脱敏算法11：DES、3DES、AES<br>
 	 * <br>
@@ -421,6 +446,7 @@ public class Desensitization_Algorithm{
      * <br>
      * 调用方式：<br>
      * 		String DES_dncode = DES_dnc(DES_encode,"12345678")
+     * </code>
      * 
 	 * @param plainText		待处理字符串
 	 * @param originKey		密钥
@@ -443,16 +469,18 @@ public class Desensitization_Algorithm{
         return decipherText;
     }
 	
-	/**	 
+	/**	
+	 * <code> 
 	 * 脱敏算法12：分桶脱敏<br>
 	 * <br>
 	 * 示例如下：<br>
-     * 输⼊：血压高压值190<br>
+     * 输入：血压高压值190<br>
      * 参数：140以上->高血压，90〜140->正常血压，90以下->低血压<br>
      * 输出：高血压<br>
      * <br>
 	 * 调用方式：<br>
 	 * 		String alg_12 = Bucket_desensitization("190");<br>
+	 * </code>
 	 * 
 	 * @param pressure		血压值
 	 * @return				高血压、正常血压、低血压
